@@ -1,0 +1,7 @@
+numpy
+pandas
+statsmodels
+scikit-learn
+clickhouse_connect
+clickhouse-driver
+apache-airflow-providers-trino
