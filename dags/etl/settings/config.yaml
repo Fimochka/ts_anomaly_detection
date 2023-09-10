@@ -4,13 +4,32 @@ metrics:
     date_column_format: '%Y-%m-%d %H:%M:%S'
     data_loader: CSVDataLoader
     data_path: './data/electricityConsumptionAndProduction.csv'
-    run_period: 'month'
+    run_period: 'hour'
     start_dttm: '2019-01-01 00:00:00'
   - metric_name: 'Production'
     date_column_name: 'DateTime'
     date_column_format: '%Y-%m-%d %H:%M:%S'
     data_loader: CSVDataLoader
-    data_preprocessor: ConstantImputeProcessor
+    data_preprocessor:
+      class_name: ConstantImputeProcessor
+      imput_value: 1000
     data_path: './data/electricityConsumptionAndProduction.csv'
-    run_period: 'month'
+    run_period: 'hour'
+    start_dttm: '2019-01-01 00:00:00'
+  - metric_name: 'Nuclear'
+    date_column_name: 'DateTime'
+    date_column_format: '%Y-%m-%d %H:%M:%S'
+    data_loader: CSVDataLoader
+    data_preprocessor:
+      class_name: ConstantImputeProcessor
+      imput_value: 0
+    data_path: './data/electricityConsumptionAndProduction.csv'
+    run_period: 'hour'
+    start_dttm: '2019-01-01 00:00:00'
+  - metric_name: 'Wind'
+    date_column_name: 'DateTime'
+    date_column_format: '%Y-%m-%d %H:%M:%S'
+    data_loader: CSVDataLoader
+    data_path: './data/electricityConsumptionAndProduction.csv'
+    run_period: 'hour'
     start_dttm: '2019-01-01 00:00:00'
