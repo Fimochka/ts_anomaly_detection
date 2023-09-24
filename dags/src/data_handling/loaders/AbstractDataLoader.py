@@ -16,5 +16,6 @@ class BaseDataLoader(ABC):
                   **kwargs):
         raise NotImplementedError
 
-    def upload_data(self):
+    def upload_data(self,
+                    **kwargs):
         raise NotImplementedError

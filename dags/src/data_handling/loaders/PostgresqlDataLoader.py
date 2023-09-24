@@ -1,27 +1,46 @@
 import pandas as pd
 import datetime as dt
 import psycopg2
+import logging
+
+from airflow.providers.postgres.hooks.postgres import PostgresHook
 
 from .AbstractDataLoader import BaseDataLoader
 
 
 class PostgresqlDataLoader(BaseDataLoader):
-    def __init__(self, event_dttm, metric_settings):
-        super().__init__(event_dttm, metric_settings)
+    def __init__(self, run_dttm, metric_settings):
+        super().__init__(run_dttm, metric_settings)
         self.metric_settings = metric_settings
-        self.event_dttm = event_dttm
+        self.run_dttm = run_dttm
         self.df = None
 
     def _init_connection(self,
-                         connection):
-        self.connection = connection
+                         connection_id):
+        self.connection_id = connection_id
+        # init postgreshook
+        self.postgres_hook = PostgresHook(postgres_conn_id=connection_id)
 
     def load_data(self,
                   **kwargs):
-        self._init_connection(connection=kwargs.get('connection'))
-        query = kwargs.get('query', None)
-        self.df = pd.read_csv(data_path)
-        self._prepare_data()
+        self._init_connection(connection_id=kwargs.get('connection_id'))
+        # variables
+        input_data_table = kwargs.get('input_data_table', None)
+        metric_name = kwargs.get('metric_name', None)
+        start_dttm = kwargs.get('start_dttm', None)
+
+        query = """select *
+                   from {input_data_table}
+                   where metric_name='{metric_name}' 
+                   and event_dttm between '{start_dttm}' and '{event_dttm}'""".format(input_data_table=input_data_table,
+                                                                                      metric_name=metric_name,
+                                                                                      event_dttm=self.run_dttm,
+                                                                                      start_dttm=start_dttm)
+        logging.info(query)
+        self.df = self.postgres_hook.get_pandas_df(sql=query)
+
+        if kwargs.get('is_preprocessing', None):
+            self._prepare_data()
 
     def _prepare_data(self):
         metric_name = self.metric_settings.get('metric_name')
@@ -38,10 +57,13 @@ class PostgresqlDataLoader(BaseDataLoader):
         self.df.columns = ['event_dttm', 'value']
         self.df['metric_name'] = metric_name
 
-        # filtering hostory if needed
-        start_dttm = self.metric_settings.get('start_dttm', None)
-        if start_dttm:
-            self.df = self.df[self.df['event_dttm'] > start_dttm]
-
-    def upload_data(self):
-        pass
+    def upload_data(self,
+                    **kwargs):
+        data = kwargs.get('data', None)
+        connection_id = kwargs.get('connection_id', None)
+        output_table = kwargs.get('output_table', None)
+        # init postgreshook
+        postgres_hook = PostgresHook(postgres_conn_id=connection_id)
+        # insert data
+        postgres_hook.insert_rows(output_table,
+                                  data.values)
