@@ -54,3 +54,4 @@
 Ссылки:
 1. обзор методов поиска аномалий на основе обучения без учителя - https://www.mdpi.com/1424-8220/23/5/2844
 2. causal inference with synthetic control - https://www.google.ru/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&ved=2ahUKEwisz_bXxJOBAxUzcvEDHX0IBLAQFnoECBkQAQ&url=https%3A%2F%2Ftowardsdatascience.com%2Fcausal-inference-with-synthetic-control-in-python-4a79ee636325&usg=AOvVaw1RIQanegkgbVpqwsF8r3PT&opi=89978449
+3. https://habr.com/ru/articles/344762/ - классная обзорная статья

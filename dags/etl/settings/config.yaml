@@ -1,3 +1,5 @@
+raw_data_table: public.ts_raw_data
+raw_data_loader: PostgresqlDataLoader
 metrics:
   - metric_name: 'Consumption'
     date_column_name: 'DateTime'
@@ -5,7 +7,6 @@ metrics:
     data_loader: CSVDataLoader
     data_path: './data/electricityConsumptionAndProduction.csv'
     run_period: 'hour'
-    start_dttm: '2019-01-01 00:00:00'
   - metric_name: 'Production'
     date_column_name: 'DateTime'
     date_column_format: '%Y-%m-%d %H:%M:%S'
@@ -15,7 +16,6 @@ metrics:
       imput_value: 1000
     data_path: './data/electricityConsumptionAndProduction.csv'
     run_period: 'hour'
-    start_dttm: '2019-01-01 00:00:00'
   - metric_name: 'Nuclear'
     date_column_name: 'DateTime'
     date_column_format: '%Y-%m-%d %H:%M:%S'
@@ -25,11 +25,9 @@ metrics:
       imput_value: 0
     data_path: './data/electricityConsumptionAndProduction.csv'
     run_period: 'hour'
-    start_dttm: '2019-01-01 00:00:00'
   - metric_name: 'Wind'
     date_column_name: 'DateTime'
     date_column_format: '%Y-%m-%d %H:%M:%S'
     data_loader: CSVDataLoader
     data_path: './data/electricityConsumptionAndProduction.csv'
     run_period: 'hour'
-    start_dttm: '2019-01-01 00:00:00'

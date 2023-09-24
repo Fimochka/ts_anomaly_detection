@@ -1,19 +1,18 @@
+anomaly_stats_table: public.ts_anomaly_stats_data
 metrics:
-  - name: watched_time_main_rekko_rails # название метрики
-    input_data_handler: CHDataHandler # класс загрузчика данных (для получения данных из внешнего хранилища)
-    sql_subquery: "select event_dt as time, 
-                   sum(watched_time_main_rekko_rails) as value
-                   from exp.user_metrics_hourly"
-    agg_type: sum # как агрегировать (сумма, среднее и т.д.)
-    date_column: event_dttm # название столбца с датой (нужно для фильтрации - очень желательно чтобы это была партиция)
-    output_data_handler: CHDataHandler # класс загрузчика данных (для выгрузки уже предобработанных данных во внутреннее хранилище)
-    output_table: sandbox.ts_raw_data
-
-  - name: visitor_main_rekko_rails
-    input_data_handler: CHDataHandler
-    sql_subquery: "select event_dttm as time, 
-                   max(visitor_main_rekko_rails) as value
-                   from exp.user_metrics_hourly"
-    date_column: event_dttm
-    output_data_handler: CHDataHandler
-    output_table: sandbox.ts_raw_data
+  - metric_name: 'Consumption'
+    raw_data_table: 'public.ts_raw_data'
+    is_preprocessing: False
+    data_loader: PostgresqlDataLoader
+    anomaly_detector: IQRAnomalyDetector
+    kwargs:
+      IQR_coef: 1.5
+      train_period: 30
+  - metric_name: 'Production'
+    raw_data_table: 'public.ts_raw_data'
+    is_preprocessing: False
+    data_loader: PostgresqlDataLoader
+    anomaly_detector: IQRAnomalyDetector
+    kwargs:
+      IQR_coef: 1.5
+      train_period: 30
