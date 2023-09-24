@@ -59,6 +59,7 @@ with DAG(dag_id="ts_anomaly_detector_main",
     for i, metric_settings in enumerate(metrics):
         metric_name = metric_settings.get('metric_name')
         data_loader = metric_settings.get('data_loader')
+        detector_name = metric_settings.get("anomaly_detector")
 
         load_task = PythonOperator(
             task_id=f'load_task_{metric_name}',
@@ -71,7 +72,7 @@ with DAG(dag_id="ts_anomaly_detector_main",
             dag=dag)
 
         detect_anomalies_task = PythonOperator(
-            task_id=f'detect_anomalies_task_{metric_name}',
+            task_id=f'detect_{detector_name}_task_{metric_name}',
             op_kwargs={'run_dttm': '{{ ts }}',
                        'metric_settings': metric_settings,
                        'load_task_id': f'load_task_{metric_name}'},
