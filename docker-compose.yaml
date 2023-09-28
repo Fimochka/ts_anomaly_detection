@@ -103,6 +103,15 @@ services:
       retries: 50
     restart: always
 
+  grafana:
+    image: grafana/grafana
+    ports:
+      - 3000:3000
+    volumes:
+      - ./data/grafana_data/provisioning:/etc/grafana/provisioning
+      - ./data/grafana_data/provisioning/dashboards:/var/lib/grafana/dashboards
+    restart: always
+
   airflow-webserver:
     <<: *airflow-common
     command: webserver

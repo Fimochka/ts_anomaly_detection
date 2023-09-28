@@ -1,0 +1,17 @@
+apiVersion: 1
+
+deleteDatasources:
+  - name: postgres_default
+    orgId: 1
+
+datasources:
+- name: postgres_default
+  type: postgres
+  url: host.docker.internal:5432
+  password: airflow
+  user: airflow
+  secureJsonData:
+    password: airflow
+  jsonData:
+    sslmode: "disable"
+    database: airflow
